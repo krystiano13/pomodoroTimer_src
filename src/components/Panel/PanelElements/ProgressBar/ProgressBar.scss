@@ -1,0 +1,15 @@
+.ProgressBar {
+    width : 100vw;
+    height : 2.5vh;
+    background-color: #111;
+    margin-top: 6vh;
+}
+
+.ProgressBar::before {
+    display: block;
+    position: relative;
+    content: '';
+    background-color: whitesmoke;
+    width : 60%;
+    height : 100%;
+}
