@@ -11,7 +11,22 @@
     justify-content: space-between;
     align-items: center;
 
+    transition: background-color 250ms;
+    will-change: background-color;
+
     &__title {
         font-size : 5vh;
     }
+}
+
+.pomodoro {
+    background-color: #461d1d;
+}
+
+.short {
+    background-color: #2b4123;
+}
+
+.long {
+    background-color: #17263a;
 }

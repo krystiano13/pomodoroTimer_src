@@ -2,12 +2,18 @@ import React from "react";
 import { useState } from "react";
 import "./Navbar.css";
 
-const Navbar = () => {
+interface NavbarInterface {
+  handleChangeMode: (mode: string, minutes: number) => void;
+}
+
+const Navbar: React.FC<NavbarInterface> = ({ handleChangeMode }) => {
   const [navButtons, setNavButtons] = useState(buttons);
   const handleChoosePanel = (e: React.MouseEvent<HTMLElement>) => {
     if (e.target instanceof Element) {
       const id = Number(e.target?.id);
       const btns = [...navButtons];
+
+      handleChangeMode(btns[id].mode,btns[id].minutes);
 
       btns.forEach((item) => {
         if (item.id !== id) item.choosed = false;
@@ -39,19 +45,22 @@ const buttons = [
     id: 0,
     text: "Pomodoro",
     choosed: true,
-    mode: 'Pomodoro'
+    mode: "pomodoro",
+    minutes: 25
   },
   {
     id: 1,
     text: "Short Break",
     choosed: false,
-    mode: 'Short'
+    mode: "short",
+    minutes: 5
   },
   {
     id: 2,
     text: "Long Break",
     choosed: false,
-    mode: 'Long'
+    mode: "long",
+    minutes: 15
   },
 ];
 
