@@ -7,11 +7,16 @@ const App = () => {
   const [mode, setMode] = useState<string>("pomodoro");
   const [minutes, setMinutes] = useState<number>(25);
   const [start, setStart] = useState<boolean>(false);
-  const [time,setTime] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
+  const [seed, setSeed] = useState(0);
 
   const intervalRef = useRef<NodeJS.Timer>();
+  let timeRef = useRef<number>(0);
 
-  let t:number | undefined = 0;
+  useEffect(() => {
+    timeRef.current = time;
+    console.log(timeRef.current);
+  },[time])
 
   const handleChangeMode = (mode: string, minutes: number) => {
     setMode(mode);
@@ -19,15 +24,18 @@ const App = () => {
   };
 
   const decreaseTimerValue = () => {
-    t = time;
-    t = t - 1;
+    let t = timeRef.current;
+    t--;
     setTime(t);
-    console.log(time);
   };
 
   const handleSetTimer = () => {
+    let t = 0;
     if (time <= 0) {
       t = minutes * 60;
+      setTime(t);
+    } else {
+      t = time;
       setTime(t);
     }
 
@@ -41,7 +49,7 @@ const App = () => {
   };
 
   return (
-    <div id={t.toString()} className={`App ${mode}`}>
+    <div id={time.toString()} className={`App ${mode}`}>
       <h1 className="App__title">Pomodoro Timer App</h1>
       <Navbar handleChangeMode={handleChangeMode} />
       <Panel
