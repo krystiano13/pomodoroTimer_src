@@ -1,35 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./Navbar.css";
+import { buttons } from "./buttons";
+import { handleChoosePanel } from "./handleChoosePanel";
 
 interface NavbarInterface {
   handleChangeMode: (mode: string, minutes: number) => void;
+  click: () => void;
+  time: number;
+  mode: string;
 }
 
-const Navbar: React.FC<NavbarInterface> = ({ handleChangeMode }) => {
+const Navbar: React.FC<NavbarInterface> = ({
+  handleChangeMode,
+  time,
+  mode,
+  click
+}) => {
   const [navButtons, setNavButtons] = useState(buttons);
-  const handleChoosePanel = (e: React.MouseEvent<HTMLElement>) => {
-    if (e.target instanceof Element) {
-      const id = Number(e.target?.id);
-      const btns = [...navButtons];
-
-      handleChangeMode(btns[id].mode,btns[id].minutes);
-
-      btns.forEach((item) => {
-        if (item.id !== id) item.choosed = false;
-        else item.choosed = true;
-      });
-
-      setNavButtons(btns);
-    }
-  };
+ 
   return (
     <nav className={`Navbar`}>
       {navButtons.map((item) => (
         <button
-          onClick={(e) => handleChoosePanel(e)}
+          onClick={(e) => {
+            click();
+            handleChoosePanel(e,time,navButtons,handleChangeMode)
+            setNavButtons(handleChoosePanel(e,time,navButtons,handleChangeMode))
+          }}
+          key={item.id}
           className={
-            item.choosed === true ? "Navbar__btn--choosen" : "Navbar__btn"
+            mode === item.mode ? "Navbar__btn--choosen" : "Navbar__btn"
           }
           id={item.id.toString()}
         >
@@ -39,29 +40,5 @@ const Navbar: React.FC<NavbarInterface> = ({ handleChangeMode }) => {
     </nav>
   );
 };
-
-const buttons = [
-  {
-    id: 0,
-    text: "Pomodoro",
-    choosed: true,
-    mode: "pomodoro",
-    minutes: 25
-  },
-  {
-    id: 1,
-    text: "Short Break",
-    choosed: false,
-    mode: "short",
-    minutes: 5
-  },
-  {
-    id: 2,
-    text: "Long Break",
-    choosed: false,
-    mode: "long",
-    minutes: 15
-  },
-];
 
 export { Navbar };

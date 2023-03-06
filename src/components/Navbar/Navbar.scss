@@ -3,6 +3,10 @@
   display: flex;
   justify-content: space-between;
 
+  @media screen and (orientation: portrait) {
+    width: 85vw;
+  }
+
   &__btn {
     width: 8vw;
     height: 3vh;
@@ -11,10 +15,20 @@
     border: none;
     transition: 250ms background-color;
     will-change: background-color;
+    position: static;
+    z-index: 1000;
+
+    @media screen and (orientation: portrait) {
+      width: 25vw;
+    }
 
     &--choosen {
       width: 8vw;
       height: 3vh;
+
+      @media screen and (orientation: portrait) {
+        width: 25vw;
+      }
       cursor: pointer;
       font-size: 1.65vh;
       border: none;

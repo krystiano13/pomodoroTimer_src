@@ -5,6 +5,10 @@
   align-items: center;
   margin-bottom: 5vh;
 
+  @media screen and (orientation : portrait){
+    width : 85vw;
+  }
+
   @mixin buttons($bgcolor) {
     width: 50%;
     height: 8vh;
@@ -12,8 +16,10 @@
     border: none;
     cursor: pointer;
     color: white;
+    position: static;
     background-color: $bgcolor;
     font-weight: 500;
+    z-index: 1000;
   }
 
   &__start {
