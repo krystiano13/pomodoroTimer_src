@@ -4,6 +4,8 @@ import { Navbar } from "./components/Navbar/Navbar";
 import { Panel } from "./components/Panel/Panel";
 import alarm from "./assets/sounds/alarm.mp3";
 import click from "./assets/sounds/click.mp3";
+import gear from "./assets/images/gear.png";
+import { Settings } from "./components/Settings/Settings";
 
 const App = () => {
   const [mode, setMode] = useState("pomodoro");
@@ -12,6 +14,7 @@ const App = () => {
   const [time, setTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [sessionCount, setSessionCount] = useState(0);
+  const [settingsModal, setSettingsModal] = useState(false);
 
   const intervalRef = useRef<NodeJS.Timer>();
   const timeRef = useRef(0);
@@ -92,12 +95,15 @@ const App = () => {
   return (
     <div className={`App ${mode}`}>
       <h1 className="App__title">Pomodoro Timer App</h1>
+      {settingsModal === true && <Settings />}
+
       <Navbar
         click={() => playSound(new Audio(click))}
         mode={mode}
         time={time}
         handleChangeMode={handleChangeMode}
       />
+
       <Panel
         click={() => playSound(new Audio(click))}
         startTimer={() => {
@@ -117,11 +123,25 @@ const App = () => {
         time={timeRef.current}
         reset={handleResetTimer}
       />
+
       <div className="App__ball" />
       <div className="App__ball2" />
       <div className="App__ball3" />
       <div className="App__ball4" />
       <div className="App__ball5" />
+
+      <button
+        onClick={() => {
+          setSettingsModal(!settingsModal);
+        }}
+        className="App__settingsButton"
+      >
+        <img
+          className="App__settingsButton__image"
+          src={gear}
+          alt="settings image"
+        />
+      </button>
     </div>
   );
 };
