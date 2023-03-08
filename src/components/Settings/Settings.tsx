@@ -14,7 +14,8 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            value={25}
+            defaultValue={25}
+            min={1}
           />
         </div>
         <div className="settings__form__element">
@@ -25,7 +26,8 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            value={5}
+            defaultValue={5}
+            min={1}
           />
         </div>
         <div className="settings__form__element">
@@ -36,10 +38,11 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            value={15}
+            defaultValue={15}
+            min={1}
           />
         </div>
-         <button>Save & Quit</button>
+        <button>Save & Quit</button>
       </form>
     </section>
   );

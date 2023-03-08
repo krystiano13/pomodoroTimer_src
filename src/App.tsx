@@ -6,6 +6,9 @@ import alarm from "./assets/sounds/alarm.mp3";
 import click from "./assets/sounds/click.mp3";
 import gear from "./assets/images/gear.png";
 import { Settings } from "./components/Settings/Settings";
+import { handleSetTimer } from "./components/AppFunctions/handleSetTimer";
+import { playSound } from "./components/AppFunctions/playSound";
+import { checkTimer } from "./components/AppFunctions/checkTimer";
 
 const App = () => {
   const [mode, setMode] = useState("pomodoro");
@@ -26,24 +29,17 @@ const App = () => {
     minRef.current = Math.floor(timeRef.current / 60);
     secRef.current = timeRef.current - minRef.current * 60;
 
-    if (time <= 0 && start === true) {
-      setStart(false);
-      playSound(new Audio(alarm));
-      let count = sessionCount;
-      if (mode === "pomodoro") count++;
-      setSessionCount(count);
-      if (mode === "pomodoro") {
-        if (sessionCount < 3) handleChangeMode("short", 5);
-        else {
-          handleChangeMode("long", 15);
-          setSessionCount(0);
-        }
-      } else if (mode === "short") {
-        handleChangeMode("pomodoro", 25);
-      } else handleChangeMode("pomodoro", 25);
-      setTime(0);
-      handleStopTimer();
-    }
+    checkTimer(
+      time,
+      start,
+      mode,
+      setTime,
+      setStart,
+      setSessionCount,
+      sessionCount,
+      handleChangeMode,
+      handleStopTimer
+    );
   }, [time]);
 
   const handleChangeMode = (mode: string, minutes: number) => {
@@ -51,11 +47,6 @@ const App = () => {
     setMinutes(minutes);
     secRef.current = 0;
     minRef.current = minutes;
-  };
-
-  const playSound = (audio: HTMLAudioElement) => {
-    audio.volume = 0.75;
-    audio.play();
   };
 
   const handleResetTimer = () => {
@@ -69,22 +60,6 @@ const App = () => {
     let t = timeRef.current;
     t--;
     setTime(t);
-  };
-
-  const handleSetTimer = () => {
-    let t = 0;
-    if (time <= 0) {
-      t = minutes * 60;
-      setTotalTime(t);
-    } else {
-      t = time;
-    }
-    setTime(t);
-    setStart(true);
-
-    intervalRef.current = setInterval(() => {
-      decreaseTimerValue();
-    }, 1000);
   };
 
   const handleStopTimer = () => {
@@ -107,7 +82,15 @@ const App = () => {
       <Panel
         click={() => playSound(new Audio(click))}
         startTimer={() => {
-          handleSetTimer();
+          handleSetTimer(
+            time,
+            minutes,
+            intervalRef.current,
+            setTotalTime,
+            setTime,
+            setStart,
+            decreaseTimerValue
+          );
           setStart(true);
         }}
         stopTimer={() => {
