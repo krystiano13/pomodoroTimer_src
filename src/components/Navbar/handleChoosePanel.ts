@@ -1,4 +1,4 @@
-type navigationButtons = {
+export type navigationButtons = {
   id: number;
   text: string;
   mode: string;

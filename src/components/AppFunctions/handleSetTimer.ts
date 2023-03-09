@@ -3,7 +3,6 @@ import React from "react";
 export const handleSetTimer = (
   time: number,
   minutes: number,
-  intervalRef: NodeJS.Timer | undefined,
   setTotalTime: React.Dispatch<React.SetStateAction<number>>,
   setTime: React.Dispatch<React.SetStateAction<number>>,
   setStart: React.Dispatch<React.SetStateAction<boolean>>,
@@ -18,8 +17,4 @@ export const handleSetTimer = (
   }
   setTime(timeCount);
   setStart(true);
-
-  intervalRef = setInterval(() => {
-    decreaseTimerValue();
-  }, 1000);
 };

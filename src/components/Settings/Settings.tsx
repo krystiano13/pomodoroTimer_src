@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./Settings.css";
+import { navigationButtons } from "../Navbar/handleChoosePanel";
 
-const Settings = () => {
+interface SettingsInterface {
+  navButtons: navigationButtons;
+  setNavButtons: React.Dispatch<React.SetStateAction<navigationButtons>>;
+  setMinutes: React.Dispatch<React.SetStateAction<number>>;
+  mode: string;
+}
+
+const Settings: React.FC<SettingsInterface> = ({
+  navButtons,
+  setNavButtons,
+  setMinutes,
+  mode,
+}) => {
+  const handleChangeMinutes = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const buttons = [...navButtons];
+    buttons[Number(e.target.id)].minutes = Number(e.target.value);
+    setNavButtons(buttons);
+    const minutes = buttons.find((item) => item.mode === mode)?.minutes;
+    if(minutes !== undefined) setMinutes(minutes);  
+  };
+
   return (
     <section className="settings">
       <h1 className="settings__title">Settings</h1>
@@ -14,8 +35,10 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            defaultValue={25}
+            defaultValue={navButtons[0].minutes}
             min={1}
+            id="0"
+            onChange={(e) => handleChangeMinutes(e)}
           />
         </div>
         <div className="settings__form__element">
@@ -26,8 +49,10 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            defaultValue={5}
+            defaultValue={navButtons[1].minutes}
             min={1}
+            id="1"
+            onChange={(e) => handleChangeMinutes(e)}
           />
         </div>
         <div className="settings__form__element">
@@ -38,11 +63,13 @@ const Settings = () => {
             className="settings__form__element__input"
             required
             type="number"
-            defaultValue={15}
+            defaultValue={navButtons[2].minutes}
             min={1}
+            id="2"
+            onChange={(e) => handleChangeMinutes(e)}
           />
         </div>
-        <button>Save & Quit</button>
+        <button type="button">Save & Quit</button>
       </form>
     </section>
   );

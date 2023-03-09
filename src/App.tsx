@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import "./styles/App.css";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Panel } from "./components/Panel/Panel";
-import alarm from "./assets/sounds/alarm.mp3";
 import click from "./assets/sounds/click.mp3";
 import gear from "./assets/images/gear.png";
 import { Settings } from "./components/Settings/Settings";
 import { handleSetTimer } from "./components/AppFunctions/handleSetTimer";
 import { playSound } from "./components/AppFunctions/playSound";
 import { checkTimer } from "./components/AppFunctions/checkTimer";
+import { buttons } from "./components/Navbar/buttons";
 
 const App = () => {
   const [mode, setMode] = useState("pomodoro");
@@ -18,6 +18,7 @@ const App = () => {
   const [totalTime, setTotalTime] = useState(0);
   const [sessionCount, setSessionCount] = useState(0);
   const [settingsModal, setSettingsModal] = useState(false);
+  const [navButtons, setNavButtons] = useState(buttons);
 
   const intervalRef = useRef<NodeJS.Timer>();
   const timeRef = useRef(0);
@@ -42,6 +43,10 @@ const App = () => {
     );
   }, [time]);
 
+  useEffect(() => {
+    minRef.current = minutes;
+  }, [minutes]);
+
   const handleChangeMode = (mode: string, minutes: number) => {
     setMode(mode);
     setMinutes(minutes);
@@ -52,8 +57,6 @@ const App = () => {
   const handleResetTimer = () => {
     setTime(0);
     setTotalTime(0);
-    minRef.current = 0;
-    secRef.current = 0;
   };
 
   const decreaseTimerValue = () => {
@@ -70,13 +73,22 @@ const App = () => {
   return (
     <div className={`App ${mode}`}>
       <h1 className="App__title">Pomodoro Timer App</h1>
-      {settingsModal === true && <Settings />}
+      {settingsModal === true && (
+        <Settings
+          setMinutes={setMinutes}
+          mode={mode}
+          navButtons={navButtons}
+          setNavButtons={setNavButtons}
+        />
+      )}
 
       <Navbar
         click={() => playSound(new Audio(click))}
         mode={mode}
         time={time}
         handleChangeMode={handleChangeMode}
+        navButtons={navButtons}
+        setNavButtons={setNavButtons}
       />
 
       <Panel
@@ -84,13 +96,15 @@ const App = () => {
         startTimer={() => {
           handleSetTimer(
             time,
-            minutes,
-            intervalRef.current,
+            minRef.current,
             setTotalTime,
             setTime,
             setStart,
             decreaseTimerValue
           );
+          intervalRef.current = setInterval(() => {
+            decreaseTimerValue();
+          }, 1000);
           setStart(true);
         }}
         stopTimer={() => {
