@@ -82,6 +82,8 @@ const App = () => {
           mode={mode}
           navButtons={navButtons}
           setNavButtons={setNavButtons}
+          settingsModal={settingsModal}
+          setSettingsModal={setSettingsModal}
         />
       )}
 

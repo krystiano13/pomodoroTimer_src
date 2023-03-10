@@ -7,6 +7,8 @@ interface SettingsInterface {
   setNavButtons: React.Dispatch<React.SetStateAction<navigationButtons>>;
   setMinutes: React.Dispatch<React.SetStateAction<number>>;
   mode: string;
+  setSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  settingsModal: boolean;
 }
 
 const Settings: React.FC<SettingsInterface> = ({
@@ -14,13 +16,15 @@ const Settings: React.FC<SettingsInterface> = ({
   setNavButtons,
   setMinutes,
   mode,
+  setSettingsModal,
+  settingsModal,
 }) => {
   const handleChangeMinutes = (e: React.ChangeEvent<HTMLInputElement>) => {
     const buttons = [...navButtons];
     buttons[Number(e.target.id)].minutes = Number(e.target.value);
     setNavButtons(buttons);
     const minutes = buttons.find((item) => item.mode === mode)?.minutes;
-    if(minutes !== undefined) setMinutes(minutes);  
+    if (minutes !== undefined) setMinutes(minutes);
   };
 
   return (
@@ -69,7 +73,15 @@ const Settings: React.FC<SettingsInterface> = ({
             onChange={(e) => handleChangeMinutes(e)}
           />
         </div>
-        <button type="button">Save & Quit</button>
+        <button
+          onClick={() => {
+            setSettingsModal(!settingsModal);
+          }}
+          className="settings__form__button"
+          type="button"
+        >
+          Save & Quit
+        </button>
       </form>
     </section>
   );
