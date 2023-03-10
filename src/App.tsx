@@ -51,7 +51,10 @@ const App = () => {
     setMode(mode);
     setMinutes(minutes);
     secRef.current = 0;
-    minRef.current = minutes;
+    const navButton = navButtons.find((item) => item.mode === mode)?.minutes;
+    navButton !== undefined
+      ? (minRef.current = navButton)
+      : (minRef.current = 0);
   };
 
   const handleResetTimer = () => {
